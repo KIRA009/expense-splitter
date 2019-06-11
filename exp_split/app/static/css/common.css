@@ -1,0 +1,73 @@
+/*
+	primary : 438fde 1c3a56;
+	secondary : ff7c48, fc3824;*/
+
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap');
+
+body {
+	font-family: Raleway;
+	font-size: 24px;
+}
+
+svg {
+	transform: scale(0.2);
+}
+
+header {
+	position: fixed;
+	top: -105px;
+	background-color: #4d4845;
+	height: 200px;
+	width: 100vw;
+}
+
+.btn {
+	font-size: 18px;
+	margin-top: 25px;
+	text-transform: uppercase;
+	font-weight: 700;
+	padding: 10px;
+	cursor: pointer;
+}
+
+@media (max-width: 500px) {
+	.btn {
+		font-size: 16px;
+	}
+}
+
+.bg-prim {
+	background-color: #438fde;
+	color: #fff!important;
+	transition: 0.3s;
+}
+
+.btn:hover.bg-prim {
+	box-shadow: 5px 5px 5px 0px #1c3a56;
+	transform: translateY(-5px);
+	color: #fff;
+}
+
+.bg-sec {
+	background-color: #ff7c48;
+	color: #fff!important;
+	transition: 0.3s;
+}
+
+.btn:hover.bg-sec {
+	box-shadow: 5px 5px 5px 0px #fc3824;
+	transform: translateY(-5px);
+	color: #fff;
+}
+
+.txt-sec {
+	color: #ff6535;
+}
+
+a:focus, button:focus {
+	box-shadow: none!important;
+}
+
+a:hover {
+	text-decoration: none;
+}

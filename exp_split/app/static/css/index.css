@@ -1,0 +1,11 @@
+#content {
+        position: relative;
+        top: 105px;
+}
+
+#content p {
+        margin-top: 50px;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #4d4845;
+}

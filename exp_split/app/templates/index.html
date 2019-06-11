@@ -1,0 +1,16 @@
+{% extends 'common.html' %}
+{% load static %}
+
+
+{% block css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{% block content %}
+<section id="content" class="text-center">
+        <p>Share bills and expenses. </p>
+        <p>Make sure everyone gets paid</p>
+        <p>What's more, its free!!!</p>
+        <a class="btn bg-sec" href='{% url "login" %}'>Get started now</a>
+</section>
+{% endblock %}
