@@ -1,6 +1,8 @@
 /*
 	primary : 438fde 1c3a56;
-	secondary : ff7c48, fc3824;*/
+	secondary : ff7c48, fc3824;
+	logo: fc9c73, 4d4845;
+*/
 
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap');
 
@@ -37,7 +39,7 @@ header {
 }
 
 .bg-prim {
-	background-color: #438fde;
+	background-color: #438fde!important;
 	color: #fff!important;
 	transition: 0.3s;
 }
@@ -49,7 +51,7 @@ header {
 }
 
 .bg-sec {
-	background-color: #ff7c48;
+	background-color: #ff7c48!important;
 	color: #fff!important;
 	transition: 0.3s;
 }
@@ -61,11 +63,12 @@ header {
 }
 
 .txt-sec {
-	color: #ff6535;
+	color: #ff6535!important;
 }
 
 a:focus, button:focus {
 	box-shadow: none!important;
+	outline: 0;
 }
 
 a:hover {

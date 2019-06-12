@@ -1,0 +1,111 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block title %} - Home{% endblock %}
+
+{% block usrname %}
+	<a class="txt-sec" href='{% url "logout" %}'>Logout <br> {{ user.profile.name }}</a>
+{% endblock %}
+
+{% block content %}
+	<nav id="nav" class="container-fluid">
+		<div class="row">
+			<a href="#friends" class="col active">
+				Friends <span>({{ pending_reqs }})</span>
+			</a>
+			<a href="#groups" class="col">
+				Groups
+			</a>
+			<a href="#activity" class="col">
+				Activity
+			</a>
+		</div>
+	</nav>
+
+	<section id="friends" class="display">
+		<div class="friends text-left">
+			{% for friend in friends %}
+			<div class="friend">
+				{% if friend.user1 == user %}
+				<span class="name"> {{ friend.user2 }}</span>
+				<span class="owe green"> {% if friend.owe == 0 %} settled up {% elif friend.owe < 0 %} you owe<br> Rs {% widthratio friend.owe 1 -1 %} {% else %} owes you <br> Rs {[ friend.owe }} {% endif %}</span>
+				{% else %}
+				<span class="name"> {{ friend.user1 }}</span>
+				<span class="owe green"> {% if friend.owe == 0 %} settled up {% elif friend.owe > 0 %} you owe<br> Rs {{ friend.owe }} {% else %} owes you <br> Rs {% widthratio friend.owe 1 -1 %} {% endif %}</span>
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+  		<button type="button" class="btn bg-prim" data-toggle="modal" data-target="#add">Add Friends</button>
+
+
+		<div id="add" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
+  			<div class="modal-dialog" role="document">
+    			<div class="modal-content">
+      				<div class="modal-body">
+        				<form method="post" action='{% url "send_request" %}'>
+							{% csrf_token %}
+				  			<div class="form-group">
+				                <input type="email" class="form-control" id="email" required name="email" pattern="^\w+@\w+\.(\w{2,3})$" placeholder="Enter email">
+				            </div>
+				  			<button type="submit" class="btn bg-prim">Send request</button>
+						</form>
+      				</div>
+      				<div class="modal-footer">
+        				<button type="button" class="btn bg-sec exit">
+        					Close
+        				</button>
+      				</div>
+    			</div>
+  			</div>
+		</div>
+
+		<div id="received">
+			<span>Received requests</span>
+			{% for request in rec_reqs %}
+			<div class="friend">
+				<span class="name"> {{ request.from_user.profile.name }}</span>
+				<a class="btn bg-prim" href='{% url "action_request" req_id=request.id action="add" %}'> Accept</a><br>
+				<a class="btn bg-sec" href='{% url "action_request" req_id=request.id action="delete" %}'> Decline</a>
+			</div>
+			{% endfor %}
+		</div>
+
+		<div id="sent">
+			<span>Sent requests</span>
+			{% for request in sent_reqs %}
+			<div class="friend">
+				<span class="name"> {{ request.to_user.profile.name }}</span>
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+
+	<section id="groups">
+		<div class="friends text-left">
+			<div class="friend">
+				<span class="name"> Name</span>
+				<span class="owe green"> owes you <br> US$31.00</span>
+			</div>
+		</div>
+		<button class="btn bg-prim">Add more friends</button>
+	</section>
+
+	<section id="activity">
+		<div class="friends text-left">
+			<div class="friend">
+				<span class="name"> Name</span>
+				<span class="owe green"> owes you <br> US$31.00</span>
+			</div>
+		</div>
+		<button class="btn bg-prim">Add more friends</button>
+	</section>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="{% static 'js/home.js' %}"></script>
+{% endblock %}

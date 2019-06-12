@@ -1,0 +1,141 @@
+#nav {
+	margin-top: 95px;
+	background-color: #4d4845;
+	height: 45px;
+	padding-top: 10px;
+}
+
+#nav a {
+	width: 33.3vw;
+	text-align: center;
+	display: inline-block;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 18px;
+	padding-right: 0;
+	padding-left: 0;
+}
+
+#nav a.active:after {
+	content: "";
+    width: 0%;
+    height: 5px;
+    background-color: #fc9c73;
+    display: block;
+    top: 7px;
+    position: relative;
+    animation-name: active;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes active {
+	from{width: 0%}
+	to{width: 100%}
+}
+
+#friends, #groups, #activity {
+	padding: 20px;
+	text-align: center;
+	display: none;
+}
+
+.friend {
+	box-shadow: 0 0 5px 2px #dddddd;
+	height: 60px;
+	padding: 5px 20px;
+	margin-bottom: 15px;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	transition: 0.3s;
+}
+
+.friend:hover {
+	box-shadow: 0 0 5px 5px #dddddd;
+	cursor: pointer;
+}
+
+.friend .name {
+	float: left;
+}
+
+.friend .owe {
+	float: right;
+	font-size: 18px;
+}
+
+#friends button {
+	margin-top: 40px;
+}
+
+.red {
+	color: #f00;
+}
+
+.green {
+	color: #5bc5a7;
+}
+
+.display {
+	animation-name: display;
+	animation-duration: 0.3s;
+	animation-fill-mode: forwards;
+	display: block!important;
+}
+
+@keyframes display {
+	from{opacity:0;}
+	to {opacity: 1;}
+}
+
+header a:last-child {
+	font-size: 16px;
+	position: absolute;
+	top: 130px;
+	right: 20px;
+	cursor: pointer;
+}
+
+.modal {
+	top: 200px;
+	box-shadow: 0 0 50vw 10vw #555;
+	height: initial;
+	width: 400px;
+	left: calc(50vw - 200px);
+	border-radius: 1.25rem;
+}
+
+.modal-dialog {
+	margin: 0;
+}
+
+.modal-footer {
+	height: 70px;
+	padding: 10px;
+}
+
+.modal-footer .btn {
+	margin: 0!important;
+}
+
+#received, #sent {
+	margin-top: 30px;
+}
+
+#received > span, #sent > span {
+	border-bottom: 1px solid #999;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+#received .friend {
+	height: 78px;
+}
+
+#received .btn {
+	line-height: 1;
+	padding: 5px;
+	float: right;
+	margin-top: 0;
+}

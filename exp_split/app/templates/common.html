@@ -3,30 +3,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
 
-        {% block css %} {% endblock %}
+    {% block css %} {% endblock %}
 
-        <title>Expense Splitter {% block title %}{% endblock %}</title>
+    <title>Expense Splitter {% block title %}{% endblock %}</title>
 </head>
 <body>
 
-        <header class="text-center">
-                <a href='{% url "index" %}'>
-                        <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="300" height="300" style="fill:#4d4845;stroke-width:25px;stroke:#fc9c73" />
-                                <text x="37" y="28" fill="#fff" style="transform:scale(5); font-weight:700;">E</text>
-                                <polygon points="0,0 300,300 0,300" style="fill:#fc9c73;stroke:#fc9c73" />
-                                <text x="10" y="48" fill="#4d4845" style="transform:scale(5); font-weight:700;">S</text>
-                        </svg>
-                </a>
-        </header>
+    <header class="text-center">
+        <a href='{% url "index" %}'>
+            <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+                <rect width="300" height="300" style="fill:#4d4845;stroke-width:25px;stroke:#fc9c73" />
+                <text x="37" y="28" fill="#fff" style="transform:scale(5); font-weight:700;">E</text>
+                <polygon points="0,0 300,300 0,300" style="fill:#fc9c73;stroke:#fc9c73" />
+                <text x="10" y="48" fill="#4d4845" style="transform:scale(5); font-weight:700;">S</text>
+            </svg>
+        </a>
+        {% block usrname %} {% endblock %}
+    </header>
 
-        {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 
-        {% block js %}  {% endblock %}
+    {% block js %}  {% endblock %}
 
 </body>
 </html>
