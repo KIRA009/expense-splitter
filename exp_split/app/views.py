@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
-from .models import Profile, Friend, FriendRequest
+from .models import Profile, Friend, FriendRequest, Activity
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -12,10 +12,14 @@ class Index(TemplateView):
 class Register(View):
 	@staticmethod
 	def get(request):
+		if request.user.is_authenticated:
+			return redirect('home')
 		return render(request, 'register.html')
 
 	@staticmethod
 	def post(request):
+		if request.user.is_authenticated:
+			return redirect('home')
 		Profile.create(**request.POST)
 		return redirect('login')
 
@@ -23,10 +27,14 @@ class Register(View):
 class Login(View):
 	@staticmethod
 	def get(request):
+		if request.user.is_authenticated:
+			return redirect('home')
 		return render(request, 'login.html')
 
 	@staticmethod
 	def post(request):
+		if request.user.is_authenticated:
+			return redirect('home')
 		data = request.POST
 		user = authenticate(username=data['email'], password=data['password'])
 		if user is not None:
@@ -43,10 +51,11 @@ class Home(TemplateView):
 		user = self.request.user
 		context['user'] = user
 		context['friends'] = Friend.get_friends(user)
-		print(context['friends'])
 		context['rec_reqs'] = FriendRequest.sent_to(user)
 		context['sent_reqs'] = FriendRequest.sent_by(user)
 		context['pending_reqs'] = len(context['rec_reqs'])
+		context['activities'] = Activity.get(user)
+		# print(context['activities'])
 		return context
 
 
@@ -68,4 +77,12 @@ class ActionRequest(View):
 	@staticmethod
 	def get(request, req_id, action):
 		FriendRequest.act(req_id, action)
+		return redirect('home')
+
+
+class AddExpense(View):
+	@staticmethod
+	def post(request):
+		data = request.POST
+		Friend.update(Activity.create(**data))
 		return redirect('home')

@@ -1,0 +1,11 @@
+/Include/
+/Lib/
+/Scripts/
+/tcl/
+/LICENSE.txt
+/.idea/
+/*/.idea/
+*.sqlite3
+*.pyc
+*.ini
+migrations/

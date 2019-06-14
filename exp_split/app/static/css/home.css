@@ -98,12 +98,13 @@ header a:last-child {
 }
 
 .modal {
-	top: 200px;
-	box-shadow: 0 0 50vw 10vw #555;
+	top: 20vh;
+	box-shadow: 0 0 50vw 50vw #555;
 	height: initial;
 	width: 400px;
 	left: calc(50vw - 200px);
 	border-radius: 1.25rem;
+	z-index: 30000;
 }
 
 .modal-dialog {
@@ -138,4 +139,51 @@ header a:last-child {
 	padding: 5px;
 	float: right;
 	margin-top: 0;
+}
+
+button[data-target="#exp"] {
+	/*z-index: -1;*/
+	position: fixed;
+	right: 5vw;
+	border-radius: 50%;
+	width: 55px;
+	font-weight: 700;
+	font-family: Helvetica;
+	font-size:36px;
+	outline: none;
+	border: none;
+	top: 78vh;
+	transition: 0.3s;
+}
+
+button[data-target="#exp"].clicked {
+	transform: rotateZ(270deg);
+}
+
+#friendsdrop {
+	background-color: #f3d250!important;
+	color: #4d48ff!important;
+}
+
+#friendsdrop:hover {
+	box-shadow: 5px 5px 5px 0px #f3a000!important;
+}
+
+#emails {
+	margin-left: 10px;
+}
+
+#emails span {
+	font-size: 16px;
+	background-color: #dedede;
+	display: inline-block;
+	padding: 5px 8px;
+	border-radius: 10px;
+	margin-right: 7px;
+	margin-bottom: 5px;
+}
+
+#emails a {
+	font-size: 16px;
+	cursor: pointer;
 }

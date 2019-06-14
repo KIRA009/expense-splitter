@@ -25,23 +25,22 @@
 			</a>
 		</div>
 	</nav>
-
+	<!-------------------------------------------               Section for friends tab              --------------------------------------->
 	<section id="friends" class="display">
 		<div class="friends text-left">
 			{% for friend in friends %}
 			<div class="friend">
 				{% if friend.user1 == user %}
-				<span class="name"> {{ friend.user2 }}</span>
-				<span class="owe green"> {% if friend.owe == 0 %} settled up {% elif friend.owe < 0 %} you owe<br> Rs {% widthratio friend.owe 1 -1 %} {% else %} owes you <br> Rs {[ friend.owe }} {% endif %}</span>
+				<span class="name">{{ friend.user2 }}</span>
+				<span class="owe {% if friend.owe == 0 %}green"> settled up {% elif friend.owe < 0 %}red"> you owe<br> Rs {% widthratio friend.owe 1 -1 %} {% else %}green"> owes you <br> Rs {{ friend.owe }} {% endif %}</span>
 				{% else %}
-				<span class="name"> {{ friend.user1 }}</span>
-				<span class="owe green"> {% if friend.owe == 0 %} settled up {% elif friend.owe > 0 %} you owe<br> Rs {{ friend.owe }} {% else %} owes you <br> Rs {% widthratio friend.owe 1 -1 %} {% endif %}</span>
+				<span class="name">{{ friend.user1 }}</span>
+				<span class="owe {% if friend.owe == 0 %}green"> settled up {% elif friend.owe > 0 %}red"> you owe<br> Rs {{ friend.owe }} {% else %}green"> owes you <br> Rs {% widthratio friend.owe 1 -1 %} {% endif %}</span>
 				{% endif %}
 			</div>
 			{% endfor %}
 		</div>
   		<button type="button" class="btn bg-prim" data-toggle="modal" data-target="#add">Add Friends</button>
-
 
 		<div id="add" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
   			<div class="modal-dialog" role="document">
@@ -85,6 +84,8 @@
 		</div>
 	</section>
 
+	<!------------------------------------------               Section for groups tab              ----------------------------------------->
+
 	<section id="groups">
 		<div class="friends text-left">
 			<div class="friend">
@@ -95,15 +96,63 @@
 		<button class="btn bg-prim">Add more friends</button>
 	</section>
 
+	<!-------------------------------------------            Section for activities tab      --------------------------------------->
 	<section id="activity">
 		<div class="friends text-left">
+			{% for activity in activities %}
 			<div class="friend">
-				<span class="name"> Name</span>
-				<span class="owe green"> owes you <br> US$31.00</span>
+				{% if activity.payer == user %}
+				<span class="name">{{ activity.loanee }}</span>
+				<span class="owe green"> {% if activity.settled %} settled up {% else %} owes you<br> Rs {{ activity.money }} {% endif %}</span>
+				{% else %}
+				<span class="name">{{ activity.payer }}</span>
+				<span class="owe {% if activity.settled %}green"> settled up {% else %}red"> you owe <br> Rs {{ activity.money }} {% endif %}</span>
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+
+	<!------------------------------------------               Modal for adding expense                ------------------------------------->
+
+	<button type="button" data-toggle="modal" data-target="#exp" class="bg-sec">+</button>
+	<div id="exp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exp" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+  				<div class="modal-body">
+    				<form method="post" action='{% url "add_expense" %}'>
+						{% csrf_token %}
+			            <div class="form-group">
+			                <input type="text" class="form-control" id="desc" required name="desc" placeholder="Enter a description">
+			            </div>
+			            <div class="input-group mb-4">
+  							<div class="input-group-prepend">
+    							<span class="input-group-text">&#x20B9;</span>
+  							</div>
+  							<input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" name="expense" value="0">
+						</div>
+						<label for="even" style="font-size: 16px;">Split evenly</label>
+						<input type="checkbox" name="even" id="even">
+			            <div class="form-group" id="emails" name="{{ user.email }}"></div>
+			            <div class="dropdown">
+  							<button class="btn bg-sec dropdown-toggle" type="button" id="friendsdrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add friends</button>
+  							<div class="dropdown-menu" aria-labelledby="friendsdrop">
+  								{% for friend in friends %}
+    							<a class="dropdown-item" href="#">{% if friend.user1 == user %}{{ friend.user2 }}{% else %}{{ friend.user1 }}{% endif %}</a>
+    							{% endfor %}
+  							</div>
+						</div>
+			  			<button type="submit" class="btn bg-prim">Send request</button>
+					</form>
+  				</div>
+  				<div class="modal-footer">
+    				<button type="button" class="btn bg-sec exit">
+    					Close
+    				</button>
+  				</div>
 			</div>
 		</div>
-		<button class="btn bg-prim">Add more friends</button>
-	</section>
+	</div>
 {% endblock %}
 
 {% block js %}

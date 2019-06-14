@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Index, Register, Login, Home, SendRequest, ActionRequest, Logout
+from .views import Index, Register, Login, Home, SendRequest, ActionRequest, AddExpense, Logout
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
 	path('home/', login_required(Home.as_view()), name='home'),
 	path('send-request/', login_required(SendRequest.as_view()), name='send_request'),
 	path('action-request/<int:req_id>/<str:action>/', login_required(ActionRequest.as_view()), name='action_request'),
+	path('add-expense/', login_required(AddExpense.as_view()), name='add_expense'),
 	path('logout/', login_required(Logout.as_view()), name='logout')
 ]
