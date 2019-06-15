@@ -54,8 +54,9 @@ class Home(TemplateView):
 		context['rec_reqs'] = FriendRequest.sent_to(user)
 		context['sent_reqs'] = FriendRequest.sent_by(user)
 		context['pending_reqs'] = len(context['rec_reqs'])
-		context['activities'] = Activity.get(user)
-		# print(context['activities'])
+		context['activities'] = Activity.get_activities(user)
+		context['expenses'] = Activity.get_expenses(user)
+		context['total_expense'] = user.profile.expense
 		return context
 
 

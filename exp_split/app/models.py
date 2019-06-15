@@ -25,6 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
 	user = models.OneToOneField('User', to_field='email', on_delete=models.CASCADE)
 	name = models.CharField(max_length=64)
+	expense = models.FloatField(default=0)
 
 	objects = models.Manager()
 
@@ -60,15 +61,25 @@ class Friend(models.Model):
 	@staticmethod
 	def update(activities):
 		for activity in activities:
+			if activity.loanee is None:
+				user = activity.payer.profile
+				user.expense -= activity.money
+				user.save()
+				continue
 			friendship = Friend.objects.get(Q(user1=activity.payer, user2=activity.loanee) |
 			                                   Q(user1=activity.loanee, user2=activity.payer))
 			if not friendship:
 				continue
-			if not activity.settled:
-				if friendship.user1 == activity.payer:
-					friendship.owe += activity.money
-				else:
-					friendship.owe -= activity.money
+
+			if friendship.user1 == activity.payer:
+				user2 = friendship.user2.profile
+				friendship.owe += activity.money
+			else:
+				user1 = friendship.user2.profile
+				user2 = friendship.user1.profile
+				friendship.owe -= activity.money
+			user2.expense += activity.money
+			user2.save()
 			friendship.save()
 
 
@@ -111,10 +122,10 @@ class FriendRequest(models.Model):
 
 class Activity(models.Model):
 	payer = models.ForeignKey('User', on_delete=models.CASCADE, to_field='email', related_name='owes')
-	loanee = models.ForeignKey('User', on_delete=models.CASCADE, to_field='email', related_name='owe_to')
+	loanee = models.ForeignKey('User', on_delete=models.CASCADE, to_field='email', related_name='owe_to', null=True)
 	desc = models.TextField()
 	money = models.FloatField()
-	settled = models.BooleanField(default=False)
+	payback = models.BooleanField(default=False)
 	date = models.DateTimeField(auto_now_add=True)
 
 	objects = models.Manager()
@@ -123,13 +134,29 @@ class Activity(models.Model):
 	def create(**kwargs):
 		users = [(User.get(email), float(money)) for email, money in eval(kwargs['emails'][0]).items()]
 		desc = kwargs['desc'][0]
-		activities = []
+		activities = list()
 		if len(users) == 1:
-			pass
-		for user in users[1:]:
-			activities.append(Activity.objects.create(payer=users[0][0], loanee=user[0], desc=desc, money=user[1]))
+			activities.append(Activity.objects.create(payer=users[0][0], loanee=None, desc=desc, money=users[0][1]))
+		else:
+			if not kwargs.get('payback'):
+				payback = False
+			else:
+				payback = True
+			for user in users[1:]:
+				activities.append(Activity.objects.create(payer=users[0][0], loanee=user[0], desc=desc, money=user[1],
+				                                          payback=payback))
+			user = users[0][0].profile
+			if payback:
+				user.expense -= 2 * float(kwargs['expense'][0])
+			else:
+				user.expense -= float(kwargs['expense'][0])
+			user.save()
 		return activities
 
 	@staticmethod
-	def get(user):
-		return Activity.objects.filter(Q(payer=user) | Q(loanee=user)).order_by('-date')
+	def get_activities(user):
+		return Activity.objects.filter(Q(payer=user) | Q(loanee=user)).filter(~Q(loanee=None)).order_by('-date')
+
+	@staticmethod
+	def get_expenses(user):
+		return Activity.objects.filter(payer=user, loanee=None)

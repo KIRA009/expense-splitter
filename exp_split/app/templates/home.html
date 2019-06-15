@@ -14,19 +14,35 @@
 {% block content %}
 	<nav id="nav" class="container-fluid">
 		<div class="row">
-			<a href="#friends" class="col active">
-				Friends <span>({{ pending_reqs }})</span>
+			<a href="#dashboard" class="col active">
+				Dashboard
 			</a>
-			<a href="#groups" class="col">
-				Groups
+			<a href="#friends" class="col">
+				Friends <span>({{ pending_reqs }})</span>
 			</a>
 			<a href="#activity" class="col">
 				Activity
 			</a>
 		</div>
 	</nav>
-	<!-------------------------------------------               Section for friends tab              --------------------------------------->
-	<section id="friends" class="display">
+
+	<!------------------------------------------          Section for dashboard      ----------------------------------------------->
+
+	<section id="dashboard" class="display">
+		<p id="total">Your expenses till date: <span class="{% if total_expense < 0 %}red"> Rs {% widthratio total_expense 1 -1 %} {% else %}green"> Rs {{ total_expense }}{% endif %} </span></p>
+		<div class="expenses text-left">
+			{% for expense in expenses %}
+			<div class="expense">
+				<span class="name">{{ expense.desc }}</span>
+				<span class="owe red"> You spent <br> Rs {{ expense.money }}</span>
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+
+
+	<!-------------------------------------------          Section for friends tab     --------------------------------------------->
+	<section id="friends">
 		<div class="friends text-left">
 			{% for friend in friends %}
 			<div class="friend">
@@ -84,18 +100,6 @@
 		</div>
 	</section>
 
-	<!------------------------------------------               Section for groups tab              ----------------------------------------->
-
-	<section id="groups">
-		<div class="friends text-left">
-			<div class="friend">
-				<span class="name"> Name</span>
-				<span class="owe green"> owes you <br> US$31.00</span>
-			</div>
-		</div>
-		<button class="btn bg-prim">Add more friends</button>
-	</section>
-
 	<!-------------------------------------------            Section for activities tab      --------------------------------------->
 	<section id="activity">
 		<div class="friends text-left">
@@ -103,17 +107,17 @@
 			<div class="friend">
 				{% if activity.payer == user %}
 				<span class="name">{{ activity.loanee }}</span>
-				<span class="owe green"> {% if activity.settled %} settled up {% else %} owes you<br> Rs {{ activity.money }} {% endif %}</span>
+				<span class="owe green"> owes you<br> Rs {{ activity.money }}</span>
 				{% else %}
 				<span class="name">{{ activity.payer }}</span>
-				<span class="owe {% if activity.settled %}green"> settled up {% else %}red"> you owe <br> Rs {{ activity.money }} {% endif %}</span>
+				<span class="owe red"> you owe <br> Rs {{ activity.money }}</span>
 				{% endif %}
 			</div>
 			{% endfor %}
 		</div>
 	</section>
 
-	<!------------------------------------------               Modal for adding expense                ------------------------------------->
+	<!------------------------------------------               Modal for adding expense        ------------------------------------->
 
 	<button type="button" data-toggle="modal" data-target="#exp" class="bg-sec">+</button>
 	<div id="exp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exp" aria-hidden="true">
@@ -142,6 +146,8 @@
     							{% endfor %}
   							</div>
 						</div>
+						<label for="payback" style="font-size: 16px;">Payback</label>
+						<input type="checkbox" name="payback" id="payback"><br>
 			  			<button type="submit" class="btn bg-prim">Send request</button>
 					</form>
   				</div>

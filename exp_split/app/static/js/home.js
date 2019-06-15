@@ -148,6 +148,7 @@ function remove_email(evt) {
 
 	delete email_ids[email];
 	add_emails(email_ids);
+	get_total();
 }
 
 function add_emails(arr) {
@@ -183,9 +184,12 @@ function add_emails(arr) {
 }
 
 function get_total(evt) {
-	email_ids[evt.target.previousSibling.textContent] = evt.target.value;
+	if (evt != null)
+		email_ids[evt.target.previousSibling.textContent] = evt.target.value;
 	expense.value = parseInt(0, 10);
 	for (var key in email_ids) {
+		if (email_ids[key] == null)
+			continue
 		expense.value = parseInt(expense.value, 10) + parseInt(email_ids[key], 10);
 	}
 }
@@ -204,23 +208,18 @@ function remove_emails(arr) {
 	email_ids = new Object();
 	email_ids[emails.getAttribute('name')] = 0;
 	add_emails(email_ids);
+	expense.value = 0;
 }
 
 
 // add expense
 var form = document.querySelector('#exp form');
 form.onsubmit = (evt) => {
-	var sum = expense.value;
-	for (var key in email_ids)
-		sum -= email_ids[key];
-	if (sum != 0) {
-		evt.preventDefault();
-		return;
-	}
 	var input = document.createElement('input');
 	input.setAttribute('name', 'emails');
 	input.setAttribute('value', JSON.stringify(email_ids));
 	input.setAttribute('type', 'hidden');
 	form.appendChild(input);
+	expense.removeAttribute('disabled');
 	form.submit();
 }

@@ -34,13 +34,13 @@
 	to{width: 100%}
 }
 
-#friends, #groups, #activity {
+#friends, #dashboard, #activity {
 	padding: 20px;
 	text-align: center;
 	display: none;
 }
 
-.friend {
+.friend, .expense {
 	box-shadow: 0 0 5px 2px #dddddd;
 	height: 60px;
 	padding: 5px 20px;
@@ -51,16 +51,16 @@
 	transition: 0.3s;
 }
 
-.friend:hover {
+.friend:hover, .expense:hover {
 	box-shadow: 0 0 5px 5px #dddddd;
 	cursor: pointer;
 }
 
-.friend .name {
+.friend .name, .expense .name {
 	float: left;
 }
 
-.friend .owe {
+.friend .owe, .expense .owe {
 	float: right;
 	font-size: 18px;
 }
