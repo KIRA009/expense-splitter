@@ -1,5 +1,6 @@
 # Live Site
-- The website is hosted at <a href="https://expensesplitter.pythonanywhere.com/app"> here<a>
+<a href="https://expensesplitter.pythonanywhere.com/app"><img src="https://i.postimg.cc/hPVsTK0h/Screenshot-12.png"></a>
+
 - Make an account and add your friends, and manage your expenses
 
 # Local Installation
