@@ -160,3 +160,12 @@ class Activity(models.Model):
 	@staticmethod
 	def get_expenses(user):
 		return Activity.objects.filter(payer=user, loanee=None)
+
+	@staticmethod
+	def delete_exp(user, act_id):
+		activity = Activity.objects.get(id=int(act_id), payer=user, loanee=None)
+		if activity:
+			user = activity.payer.profile
+			user.expense += activity.money
+			user.save()
+			activity.delete()

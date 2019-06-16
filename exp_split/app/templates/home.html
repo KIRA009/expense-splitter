@@ -33,8 +33,13 @@
 		<div class="expenses text-left">
 			{% for expense in expenses %}
 			<div class="expense">
-				<span class="name">{{ expense.desc }}</span>
-				<span class="owe red"> You spent <br> Rs {{ expense.money }}</span>
+				<span class="name">{{ expense.desc }}</span><br>
+				<span class="exp red"> You spent Rs {{ expense.money }}</span>
+				<form action='{% url "delete_expense" %}' method="POST">
+					{% csrf_token %}
+					<input type="hidden" name="id" value="{{ expense.id }}">
+					<button type="submit" class="btn bg-sec">Delete</button>
+				</form>
 			</div>
 			{% endfor %}
 		</div>

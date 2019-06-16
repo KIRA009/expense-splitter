@@ -42,7 +42,7 @@
 
 .friend, .expense {
 	box-shadow: 0 0 5px 2px #dddddd;
-	height: 60px;
+	min-height: 60px;
 	padding: 5px 20px;
 	margin-bottom: 15px;
 	max-width: 600px;
@@ -66,9 +66,18 @@
 	float: left;
 }
 
-.friend .owe, .expense .owe {
+.friend .owe {
 	float: right;
 	font-size: 18px;
+}
+
+.expense form {
+	float: right;
+	position: relative;
+}
+
+.expense form .btn {
+	margin-top: -20px;
 }
 
 #friends button {

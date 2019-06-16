@@ -87,3 +87,10 @@ class AddExpense(View):
 		data = request.POST
 		Friend.update(Activity.create(**data))
 		return redirect('home')
+
+
+class DeleteExpense(View):
+	@staticmethod
+	def post(request):
+		Activity.delete_exp(request.user, request.POST['id'])
+		return redirect('home')
