@@ -107,19 +107,37 @@
 
 	<!-------------------------------------------            Section for activities tab      --------------------------------------->
 	<section id="activity">
+		{% if activities|length == 0 %}
+		No activities yet
+		{% else %}
 		<div class="friends text-left">
 			{% for activity in activities %}
-			<div class="friend">
+			<div class="activity">
 				{% if activity.payer == user %}
-				<span class="name">{{ activity.loanee }}</span>
-				<span class="owe green"> owes you<br> Rs {{ activity.money }}</span>
+				<span class="name">{{ activity.loanee }}</span><br>
+				<span class="owe green"> owes you Rs {{ activity.money }}</span>
+				{% if not activity.settled %}
+				<span class="red settled">Not settled</span>
 				{% else %}
-				<span class="name">{{ activity.payer }}</span>
-				<span class="owe red"> you owe <br> Rs {{ activity.money }}</span>
+				<span class="green settled">Settled</span>
+				{% endif %}
+				{% else %}
+				<span class="name">{{ activity.payer }}</span><br>
+				<span class="owe red"> you owe Rs {{ activity.money }}</span>
+				{% if not activity.settled %}
+				<form action='{% url "settle-expense" %}' method="POST">
+					{% csrf_token %}
+					<input type="hidden" value="{{ activity.id }}" name='id'>
+					<button class="btn bg-sec">Settle</button>
+				</form>
+				{% else %}
+				<span class="green settled">Settled</span>
+				{% endif %}
 				{% endif %}
 			</div>
 			{% endfor %}
 		</div>
+		{% endif %}
 	</section>
 
 	<!------------------------------------------               Modal for adding expense        ------------------------------------->
@@ -151,8 +169,6 @@
     							{% endfor %}
   							</div>
 						</div>
-						<label for="payback" style="font-size: 16px;">Payback</label>
-						<input type="checkbox" name="payback" id="payback"><br>
 			  			<button type="submit" class="btn bg-prim">Send request</button>
 					</form>
   				</div>

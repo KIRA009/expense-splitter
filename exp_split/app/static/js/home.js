@@ -6,8 +6,12 @@ document.querySelectorAll('nav a').forEach(function(el) {
 
 function toggle(evt) {
 	evt.preventDefault();
+	if (evt.target.tagName == 'SPAN')
+		target = document.querySelector('a[href="#friends"]');
+	else
+		target = evt.target;
 	document.querySelectorAll('nav a').forEach(function(el) {
-		if (el == evt.target) {
+		if (el == target) {
 			document.getElementById(el.attributes['href'].value.slice(1, )).classList.add('display');
 			el.classList.add('active');
 		}

@@ -40,7 +40,7 @@
 	display: none;
 }
 
-.friend, .expense {
+.friend, .expense, .activity {
 	box-shadow: 0 0 5px 2px #dddddd;
 	min-height: 60px;
 	padding: 5px 20px;
@@ -52,12 +52,12 @@
 }
 
 @media (max-width: 500px) {
-	.friend, .expense {
+	.friend, .expense, .activity {
 		height: 80px;
 	}
 }
 
-.friend:hover, .expense:hover {
+.friend:hover, .expense:hover, .activity:hover {
 	box-shadow: 0 0 5px 5px #dddddd;
 	cursor: pointer;
 }
@@ -77,7 +77,19 @@
 }
 
 .expense form .btn {
-	margin-top: -20px;
+	margin-top: -40px;
+}
+
+.activity form {
+	float: right;
+	position: relative;
+	top: -50px;
+}
+
+.activity .settled {
+	float: right;
+	position: relative;
+	top: -30px;
 }
 
 #friends button {

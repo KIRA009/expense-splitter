@@ -94,3 +94,10 @@ class DeleteExpense(View):
 	def post(request):
 		Activity.delete_exp(request.user, request.POST['id'])
 		return redirect('home')
+
+
+class SettleExpense(View):
+	@staticmethod
+	def post(request):
+		Activity.delete_act(request.user, request.POST['id'])
+		return redirect('home')

@@ -61,26 +61,19 @@ class Friend(models.Model):
 	@staticmethod
 	def update(activities):
 		for activity in activities:
-			if activity.loanee is None:
-				user = activity.payer.profile
-				user.expense -= activity.money
-				user.save()
-				continue
-			friendship = Friend.objects.get(Q(user1=activity.payer, user2=activity.loanee) |
-			                                   Q(user1=activity.loanee, user2=activity.payer))
-			if not friendship:
-				continue
+			if not activity.settled:
+				if activity.loanee is None:
+					continue
+				friendship = Friend.objects.get(Q(user1=activity.payer, user2=activity.loanee) |
+				                                Q(user1=activity.loanee, user2=activity.payer))
+				if not friendship:
+					continue
 
-			if friendship.user1 == activity.payer:
-				user2 = friendship.user2.profile
-				friendship.owe += activity.money
-			else:
-				user1 = friendship.user2.profile
-				user2 = friendship.user1.profile
-				friendship.owe -= activity.money
-			user2.expense += activity.money
-			user2.save()
-			friendship.save()
+				if friendship.user1 == activity.payer:
+					friendship.owe += activity.money
+				else:
+					friendship.owe -= activity.money
+				friendship.save()
 
 
 class FriendRequest(models.Model):
@@ -125,7 +118,7 @@ class Activity(models.Model):
 	loanee = models.ForeignKey('User', on_delete=models.CASCADE, to_field='email', related_name='owe_to', null=True)
 	desc = models.TextField()
 	money = models.FloatField()
-	payback = models.BooleanField(default=False)
+	settled = models.BooleanField(default=False)
 	date = models.DateTimeField(auto_now_add=True)
 
 	objects = models.Manager()
@@ -143,14 +136,10 @@ class Activity(models.Model):
 			else:
 				payback = True
 			for user in users[1:]:
-				activities.append(Activity.objects.create(payer=users[0][0], loanee=user[0], desc=desc, money=user[1],
-				                                          payback=payback))
-			user = users[0][0].profile
-			if payback:
-				user.expense -= 2 * float(kwargs['expense'][0])
-			else:
-				user.expense -= float(kwargs['expense'][0])
-			user.save()
+				activities.append(Activity.objects.create(payer=users[0][0], loanee=user[0], desc=desc, money=user[1]))
+		user = users[0][0].profile
+		user.expense -= float(kwargs['expense'][0])
+		user.save()
 		return activities
 
 	@staticmethod
@@ -169,3 +158,22 @@ class Activity(models.Model):
 			user.expense += activity.money
 			user.save()
 			activity.delete()
+
+	@staticmethod
+	def delete_act(user, act_id):
+		activity = Activity.objects.get(loanee=user, id=act_id)
+		if activity:
+			payer = activity.payer
+			loanee = activity.loanee
+			payer.profile.expense += activity.money
+			payer.profile.save()
+			loanee.profile.expense -= activity.money
+			loanee.profile.save()
+			friendship = Friend.objects.filter(Q(user1=payer, user2=loanee) | Q(user2=payer, user1=loanee))[0]
+			if friendship.user1 == loanee:
+				friendship.owe += activity.money
+			else:
+				friendship.owe -= activity.money
+			friendship.save()
+			activity.settled = True
+			activity.save()
